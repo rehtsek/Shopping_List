@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include meta tag to ensure proper rendering and touch zooming -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Include jQuery Mobile stylesheets -->
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <!-- Include the jQuery library -->
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <!-- Include the jQuery Mobile library -->
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<div data-role="page" id="pageone">
+  <div data-role="header">
+  <h1>Welcome To My Homepage</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  <style>
+li {font-size:2em}
+
+.bought {color:#d3d3d3}
+
+.tobuy {color:black}
+</style>
+
+</head>
+<body>
+<ul id="shoppinglist">
+<li>Oranges:3</li>
+<li >Apples:2</li>
+<li>Bread:1</li>
+</ul>
+New Item<input type="text" id="item"/><br/>
+Quantity<input type="text" id="quantity"/><br/>
+<input type="button" id="addBtn" onclick="addItem()"/><br/>
+<hr/>
+<input type="button" onclick="copyList()"/>
+
+<ul id="secondList"></ul>
+
+<script>
+
+$( document ).ready(function() {
+
+    if (localStorage.sList!=null) getListFromStorage();
+});
+
+$(document).on('click', 'li', function()
+{
+if ($(this).hasClass("bought"))
+{
+$(this).removeClass("bought");
+$(this).addClass("tobuy");
+}
+else
+  {
+$(this).removeClass("tobuy");
+$(this).addClass("bought");
+}
+});
+
+
+
+
+function addItem()
+{
+var Item = $("#item").val();
+var Quantity = $("#quantity").val();
+
+var li = "<li>" + Item + ":" + Quantity + "</li>";
+$("#shoppinglist").append(li);
+
+}
+
+function collectData()
+{
+var jList = [];
+$("#shoppinglist").children("li").each(function() {
+var s = $(this).text(); //(this will give us item + quantity
+var boughtOrNot = $(this).hasClass("bought");
+var thisItem = {};
+thisItem.itemQuantity = s;
+thisItem.bought = boughtOrNot;
+jList.push(thisItem);
+});
+return JSON.stringify(jList);
+}
+
+function getListFromStorage()
+{
+
+var stringList = localStorage.sList;
+var jsonList = JSON.parse(stringList);
+$.each(jsonList, function(i, groceryItem) {
+var li;
+if (groceryItem.bought)
+{
+li = "<li class='bought'>" + groceryItem.itemQuantity +  "</li>";
+}
+else
+{
+li =  "<li>" + groceryItem.itemQuantity +  "</li>";
+}
+
+$("#shoppinglist").append(li);
+});
+}
+
+});
+}
+
+</script>
+  <div data-role="footer">
+  <h1>Footer Text</h1>
+  </div>
+</div>
+</div>
+
+</body>
+</html>
