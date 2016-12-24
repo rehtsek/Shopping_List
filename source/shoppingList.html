@@ -25,9 +25,20 @@ Quantity <input type="text" id="quantity"/> <br/>
 
 <!--create function for bought items color to change upon clicked event-->
 <script>
-$("li").click(function()
+//new items added will now also be changed upon click
+$(document).on('click','li',function()
 {
-  $(this).addClass("bought");
+  //check status of item to know if already bought or not
+  if ($(this).hasClass("bought"))
+  {
+    $(this).removeClass("bought");
+    $(this).addClass("toBuy");
+  }
+  else
+  {
+    $(this).removeClass("toBuy");
+    $(this).addClass("bought");
+  }
 });
 </script>
 
