@@ -2,12 +2,14 @@
 <html>
 
 <head>
+  <!-- jquery library-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <style>
   li {font-sze:2em}
   </style>
 <body>
   <!--basic html shopping List-->
-<ul>
+<ul id="shoppingList">
 <li>Oranges:3</li>
 <li >Apples:2</li>
 <li>Bread:1</li>
@@ -16,5 +18,17 @@
 New Item <input type="text" id="item"/> <br/>
 Quantity <input type="text" id="quantity"/> <br/>
 <input type="button" name="addBtn" onclick="addItem()"/>
+
+<!-- Add new item to list by creating another other and appending it to the already created list-->
+<script>
+function addItem()
+{
+  var Item = $("#item").val();
+  var Quantity = $("#quantity").val();
+
+  var li = "<li>" + Item + ":" + Quantity + "</li>" ;
+  $("#shoppingList").append(li);
+}
+</script>
 </body>
 </html>
