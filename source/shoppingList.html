@@ -11,23 +11,25 @@
   /* creat class called toBuy for unbought items*/
   .toBuy {color:black}
   </style>
+</head>
 <body>
   <!--basic html shopping List-->
-<ul id="shoppingList">
-<li>Oranges:3</li>
-<li>Apples:2</li>
-<li>Bread:1</li>
-</ul>
+<ul id="shoppingList"></ul>
 <!--create two simple input fields and an Add button-->
 New Item <input type="text" id="item"/> <br/>
 Quantity <input type="text" id="quantity"/> <br/>
 <input type="button" name="addBtn" onclick="addItem()"/> <br/>
 <hr/>
-<input type="button" onclick="copyList()"/>
-<ul id="secondList"></ul>
+<input type="button" onclick="getListItems('shoppingEsther1234')"/>
 
 <!--create function for bought items color to change upon clicked event-->
 <script>
+<!--to make javascript start-->
+$( document ).ready(function() {
+
+    if (localStorage.sList!=null) getListFromStorage();
+});
+
 //new items added will now also be changed upon click
 $(document).on('click','li',function()
 {
@@ -49,11 +51,8 @@ $(document).on('click','li',function()
 <script>
 function addItem()
 {
-  var Item = $("#item").val();
-  var Quantity = $("#quantity").val();
-
-  var li = "<li>" + Item + ":" + Quantity + "</li>" ;
-  $("#shoppingList").append(li);
+  //localStorage.removeItem("shoppingEsther123");
+  addEntry("shoppingEsther1234");
 }
 </script>
 
@@ -77,9 +76,9 @@ return JSON.stringify(jList);
 
 <!-- function to display list items-->
 <script>
-function copyList()
+function getListFromStorage()
 {
-var stringList = collectData();
+var stringList = localStorage.sList;
 var jsonList = JSON.parse(stringList);
 $.each(jsonList, function(i, groceryItem) {
 var li;
@@ -92,7 +91,35 @@ else
 li =  "<li>" + groceryItem.itemQuantity +  "</li>";
 }
 
-$("#secondList").append(li);
+$("#shoppingList").append(li);
+});
+}
+
+function addEntry(listName) {
+    // Parse any JSON previously stored in allEntries
+    var existingEntries = JSON.parse(localStorage.getItem(listName));
+    if(existingEntries == null) existingEntries = [];
+    var entryItem = document.getElementById("item").value;
+    var entryQty = document.getElementById("quantity").value;
+    var entry = {
+        "item": entryItem,
+        "quantity": entryQty
+    };
+    //localStorage.setItem("entry", JSON.stringify(entry));
+    // Save allEntries back to local storage
+    existingEntries.push(entry);
+    localStorage.setItem(listName, JSON.stringify(existingEntries));
+     console.log(JSON.stringify(existingEntries));
+};
+
+function getListItems(listName){
+var shoppingListItems = localStorage.getItem(listName);
+var jsonList = JSON.parse(shoppingListItems);
+ console.log(localStorage.getItem(listName));
+$.each(jsonList, function(i, groceryItem) {
+var li;
+li =  "<li>" + item.quantity + "</li>";
+$("#shoppingList").append(li);
 });
 }
 </script>
