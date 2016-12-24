@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <!-- jquery library-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <style>
+  /*css style for font*/
   li {font-sze:2em}
+  /* create class called bought*/
+  .bought {color:#d3d3d3}
+  /* creat class called toBuy for unbought items*/
+  .toBuy {color:black}
   </style>
 <body>
   <!--basic html shopping List-->
 <ul id="shoppingList">
 <li>Oranges:3</li>
-<li >Apples:2</li>
+<li class="bought">Apples:2</li>
 <li>Bread:1</li>
 </ul>
 <!--create two simple input fields and an Add button-->
@@ -29,6 +33,9 @@ function addItem()
   var li = "<li>" + Item + ":" + Quantity + "</li>" ;
   $("#shoppingList").append(li);
 }
+
+<!--Create a class to notify when item has been clicked as bought or for deletion-->
+
 </script>
 </body>
 </html>
