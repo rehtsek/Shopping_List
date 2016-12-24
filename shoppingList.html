@@ -89,28 +89,6 @@ jList.push(thisItem);
 return JSON.stringify(jList);
 }
 
-function getListFromStorage()
-{
-
-var stringList = localStorage.sList;
-var jsonList = JSON.parse(stringList);
-$.each(jsonList, function(i, groceryItem) {
-var li;
-if (groceryItem.bought)
-{
-li = "<li class='bought'>" + groceryItem.itemQuantity +  "</li>";
-}
-else
-{
-li =  "<li>" + groceryItem.itemQuantity +  "</li>";
-}
-
-$("#shoppinglist").append(li);
-});
-}
-
-});
-}
 
 </script>
   <div data-role="footer">
