@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+  <style>
+  li {font-sze:2em}
+  </style>
 <body>
-<ul id="shoppinglist">
+  <!--basic html shopping List-->
+<ul>
 <li>Oranges:3</li>
 <li >Apples:2</li>
 <li>Bread:1</li>
 </ul>
+<!--create two simple input fields and an Add button-->
+New Item <input type="text" id="item"/> <br/>
+Quantity <input type="text" id="quantity"/> <br/>
+<input type="button" name="addBtn" onclick="addItem()"/>
 </body>
 </html>
