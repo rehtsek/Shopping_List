@@ -15,13 +15,21 @@
   <!--basic html shopping List-->
 <ul id="shoppingList">
 <li>Oranges:3</li>
-<li class="bought">Apples:2</li>
+<li>Apples:2</li>
 <li>Bread:1</li>
 </ul>
 <!--create two simple input fields and an Add button-->
 New Item <input type="text" id="item"/> <br/>
 Quantity <input type="text" id="quantity"/> <br/>
 <input type="button" name="addBtn" onclick="addItem()"/>
+
+<!--create function for bought items color to change upon clicked event-->
+<script>
+$("li").click(function()
+{
+  $(this).addClass("bought");
+});
+</script>
 
 <!-- Add new item to list by creating another other and appending it to the already created list-->
 <script>
