@@ -20,7 +20,7 @@ New Item <input type="text" id="item"/> <br/>
 Quantity <input type="text" id="quantity"/> <br/>
 <input type="button" name="addBtn" onclick="addItem()"/> <br/>
 <hr/>
-<input type="button" onclick="getListItems('shoppingEsther1234')"/>
+<input type="button" onclick="newList('shoppingHarrys1234')"/>
 
 <!--create function for bought items color to change upon clicked event-->
 <script>
@@ -52,7 +52,7 @@ $(document).on('click','li',function()
 function addItem()
 {
   //localStorage.removeItem("shoppingEsther123");
-  addEntry("shoppingEsther1234");
+  addEntry("shoppingHarrys1234");
 }
 </script>
 
@@ -95,9 +95,21 @@ $("#shoppingList").append(li);
 });
 }
 
+function newList(newList){
+var ary = [];
+var myShoppingLists = "ekShoppingList";
+var existingEntries = JSON.parse(localStorage.getItem("ekShoppingList"));
+if(existingEntries == null) existingEntries = [];
+var obj = {};
+obj[newList] = ary;
+existingEntries.push(obj);
+localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+console.log(JSON.stringify(existingEntries));
+}
+
 function addEntry(listName) {
     // Parse any JSON previously stored in allEntries
-    var existingEntries = JSON.parse(localStorage.getItem(listName));
+    var existingEntries = JSON.parse(localStorage.getItem("ekShoppingList"));
     if(existingEntries == null) existingEntries = [];
     var entryItem = document.getElementById("item").value;
     var entryQty = document.getElementById("quantity").value;
@@ -112,16 +124,35 @@ function addEntry(listName) {
      console.log(JSON.stringify(existingEntries));
 };
 
+function pushToAry(name, val) {
+var obj = {};
+obj[item] = name;
+obj[quantity] = val
+ary.push(obj);
+}
+
 function getListItems(listName){
 var shoppingListItems = localStorage.getItem(listName);
 var jsonList = JSON.parse(shoppingListItems);
- console.log(localStorage.getItem(listName));
+//console.log(localStorage.getItem(listName));
 $.each(jsonList, function(i, groceryItem) {
 var li;
-li =  "<li>" + item.quantity + "</li>";
+li = "<li>" + groceryItem.item +":" + groceryItem.quantity +" x </li> <button onclick=\"removeItem('shoppingEsther1234',"+i+")\"></button>";
 $("#shoppingList").append(li);
 });
 }
+
+function removeItem(listName,id){
+var shoppingListItems = localStorage.getItem(listName);
+console.log(localStorage.getItem(listName));
+//shoppingListItems.splice(id, 1);
+for (i = 0; i < shoppingListItems.length; i++) {
+if (shoppingListItems[i].length == id)
+shoppingListItems.splice(i, 1); //updated
+console.log(shoppingListItems.splice(i, 1));
+}
+}
+
 </script>
 
 </body>
