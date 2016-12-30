@@ -1,159 +1,136 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- jquery library-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <style>
-  /*css style for font*/
-  li {font-sze:2em}
-  /*Create a class to notify when item has been clicked as bought or for deletion*/
-  .bought {color:#d3d3d3}
-  /* creat class called toBuy for unbought items*/
-  .toBuy {color:black}
-  </style>
+<!-- jquery library-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<style>
+/*css style for font*/
+li {font-sze:2em}
+/*Create a class to notify when item has been clicked as bought or for deletion*/
+.bought {color:#d3d3d3}
+/* creat class called toBuy for unbought items*/
+.toBuy {color:black}
+</style>
 </head>
 <body>
-  <!--basic html shopping List-->
-<ul id="shoppingList"></ul>
-<!--create two simple input fields and an Add button-->
 New Item <input type="text" id="item"/> <br/>
 Quantity <input type="text" id="quantity"/> <br/>
-<input type="button" name="addBtn" onclick="addItem()"/> <br/>
-<hr/>
-<input type="button" onclick="newList('shoppingHarrys1234')"/>
+<input type="button" onclick="newList('testing5');">Create new List</button>
+<input type="button" onclick="addItem('testing5');">+</button>
+<input type="button" onclick="getList();">Show Shopping List</button>
+<input type="button" onclick="getListItems('testing1');">Show List Items</button>
+<input type="button" onclick="deleteItem('testing2',2);">Delete Items</button>
+<input type="button" onclick="showList();">Show whole list with items</button>
+<input type="button" onclick="deleteList('testing');">Delete Shopping List</button>
+<input type="button" onclick="deleteItem1('testing2','id',1);">Delete Items in shopping list</button>
+<input type="button" onclick="updateStatus('testing5','id',2);">Update Shopping List</button>
 
-<!--create function for bought items color to change upon clicked event-->
 <script>
-<!--to make javascript start-->
-$( document ).ready(function() {
-
-    if (localStorage.sList!=null) getListFromStorage();
-});
-
-//new items added will now also be changed upon click
-$(document).on('click','li',function()
-{
-  //check status of item to know if already bought or not
-  if ($(this).hasClass("bought"))
-  {
-    $(this).removeClass("bought");
-    $(this).addClass("toBuy");
-  }
-  else
-  {
-    $(this).removeClass("toBuy");
-    $(this).addClass("bought");
-  }
-});
-</script>
-
-<!-- Add new item to list by creating another other and appending it to the already created list-->
-<script>
-function addItem()
-{
-  //localStorage.removeItem("shoppingEsther123");
-  addEntry("shoppingHarrys1234");
-}
-</script>
-
-<!-- local Storage, turn list of things in JSON(Stringify) -->
-<script>
-function collectData()
-{
-  var jList = [];
-  $("#shoppingList").children("li").each(function()
-  {
-    var s = $(this).text(); // this will give us item + quantity
-    var boughtOrNot = $(this).hasClass("bought");
-    var thisItem = {};
-    thisItem.itemQuantity = s;
-    thisItem.bought = boughtOrNot;
-    jList.push(thisItem);
-});
-return JSON.stringify(jList);
-}
-</script>
-
-<!-- function to display list items-->
-<script>
-function getListFromStorage()
-{
-var stringList = localStorage.sList;
-var jsonList = JSON.parse(stringList);
-$.each(jsonList, function(i, groceryItem) {
-var li;
-if (groceryItem.bought)
-{
-li = "<li class='bought'>" + groceryItem.itemQuantity +  "</li>";
-}
-else
-{
-li =  "<li>" + groceryItem.itemQuantity +  "</li>";
-}
-
-$("#shoppingList").append(li);
-});
-}
-
-function newList(newList){
-var ary = [];
+var data = {};
 var myShoppingLists = "ekShoppingList";
-var existingEntries = JSON.parse(localStorage.getItem("ekShoppingList"));
-if(existingEntries == null) existingEntries = [];
-var obj = {};
-obj[newList] = ary;
-existingEntries.push(obj);
+
+//function for creating new shopping list
+function newList(newList){
+	//localStorage.removeItem("ekShoppingList");
+	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+if(existingEntries == null) existingEntries = {};
+	var dd = {};
+	dd[newList] = [];
+
+ $.extend(existingEntries, dd );
+
 localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
 console.log(JSON.stringify(existingEntries));
 }
 
-function addEntry(listName) {
-    // Parse any JSON previously stored in allEntries
-    var existingEntries = JSON.parse(localStorage.getItem("ekShoppingList"));
-    if(existingEntries == null) existingEntries = [];
-    var entryItem = document.getElementById("item").value;
-    var entryQty = document.getElementById("quantity").value;
-    var entry = {
-        "item": entryItem,
-        "quantity": entryQty
-    };
-    //localStorage.setItem("entry", JSON.stringify(entry));
-    // Save allEntries back to local storage
-    existingEntries.push(entry);
-    localStorage.setItem(listName, JSON.stringify(existingEntries));
-     console.log(JSON.stringify(existingEntries));
-};
+//adding item to a shopping list
+//require: listName
+function addItem(listName){
+	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+	var entryItem = $("#item").val();
+    var entryQty = $("#quantity").val();
+   var len = existingEntries[listName].length-1;
+   if(len == -1){i=1}else{
+    var i = existingEntries[listName][len];
+	i = i.id;
+	i = i+1;}
+	console.log(i);
+  existingEntries[listName].push(
+    {id: i, item: entryItem, quantity: entryQty, status: "new"}
+);
 
-function pushToAry(name, val) {
-var obj = {};
-obj[item] = name;
-obj[quantity] = val
-ary.push(obj);
+localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+console.log(JSON.stringify(existingEntries));
+}
+// lists shopping list names
+function getList(){
+	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+var keys = [];
+   for(var k in existingEntries) keys.push(k);
+
+console.log(JSON.stringify(keys));
 }
 
+// lists items in shopping list name
 function getListItems(listName){
-var shoppingListItems = localStorage.getItem(listName);
-var jsonList = JSON.parse(shoppingListItems);
-//console.log(localStorage.getItem(listName));
-$.each(jsonList, function(i, groceryItem) {
-var li;
-li = "<li>" + groceryItem.item +":" + groceryItem.quantity +" x </li> <button onclick=\"removeItem('shoppingEsther1234',"+i+")\"></button>";
-$("#shoppingList").append(li);
-});
+	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+var c = existingEntries[listName];
+console.log(JSON.stringify(c));
 }
 
-function removeItem(listName,id){
-var shoppingListItems = localStorage.getItem(listName);
-console.log(localStorage.getItem(listName));
-//shoppingListItems.splice(id, 1);
-for (i = 0; i < shoppingListItems.length; i++) {
-if (shoppingListItems[i].length == id)
-shoppingListItems.splice(i, 1); //updated
-console.log(shoppingListItems.splice(i, 1));
+//updates items in shopping list
+function updateStatus(listName, property, value){
+	 var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+	 $.each(existingEntries[listName], function(index, result) {
+
+            if (result[property] == value) {
+            	console.log(index);
+				existingEntries[listName][index].status = "bought";
+                return false;
+            }
+
+        });
+
+    localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
 }
+//delete item in shopping list
+   function deleteItem(listName, index) {
+   var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+   existingEntries[listName].splice(index,1);
+
+    localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+	console.log(JSON.stringify(existingEntries));
+}
+
+//to-do work on item name
+   function deleteItem1(listName, property, value) {
+   var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+        $.each(existingEntries[listName], function(index, result) {
+
+            if (result[property] == value) {
+            	console.log(index);
+                existingEntries[listName].splice(index,1);
+                return false;
+            }
+
+        });
+
+    localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+}
+//deletes shopping list name completely
+function deleteList(listName){
+var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+delete existingEntries[listName];
+localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+}
+
+// show shopping lists created
+function showList(){
+
+	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+	console.log(JSON.stringify(existingEntries));
 }
 
 </script>
-
 </body>
 </html>
