@@ -2,7 +2,11 @@
 <html>
 <head>
 <!-- jquery library-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
 /*css style for font*/
 li {font-sze:2em}
@@ -13,34 +17,53 @@ li {font-sze:2em}
 </style>
 </head>
 <body>
-New Item <input type="text" id="item"/> <br/>
-Quantity <input type="text" id="quantity"/> <br/>
-<input type="button" onclick="newList('testing5');">Create new List</button>
-<input type="button" onclick="addItem('testing5');">+</button>
-<input type="button" onclick="getList();">Show Shopping List</button>
-<input type="button" onclick="getListItems('testing1');">Show List Items</button>
-<input type="button" onclick="deleteItem('testing2',2);">Delete Items</button>
-<input type="button" onclick="showList();">Show whole list with items</button>
-<input type="button" onclick="deleteList('testing');">Delete Shopping List</button>
-<input type="button" onclick="deleteItem1('testing2','id',1);">Delete Items in shopping list</button>
-<input type="button" onclick="updateStatus('testing5','id',2);">Update Shopping List</button>
+
+<div class="container">
+<form>
+    <div class="form-group">
+      <div class="col-xs-2">
+      <label for="item">New item:</label>
+      <input type="text" class="form-control" id="item">
+    </div>
+      <div class="col-xs-2">
+      <label for="qty">Quantity:</label>
+      <input type="text" class="form-control" id="quantity">
+    </div>
+      </div>
+  </form>
+</div>
+<br/>
+
+<div class="container">
+<button type="button" onclick="newList('testing5');" class="btn bnt-default">Create new List</button>
+<button type="button" onclick="addItem('testing5');" class="btn bnt-default">+</button>
+<button type="button" onclick="getList();" class="btn bnt-default">Show Shopping List</button>
+<button type="button" onclick="getListItems('testing1');" class="btn bnt-default">Show List Items</button>
+<button type="button" onclick="deleteItem('testing2',2);" class="btn bnt-default">Delete Items</button>
+<button type="button" onclick="showList();" class="btn bnt-default">Show whole list with items</button>
+<button type="button" onclick="deleteList('testing');" class="btn bnt-default">Delete Shopping List</button>
+<button type="button" onclick="updateStatus('testing5','id',2);" class="btn bnt-default">Update Shopping List</button>
+</div>
 
 <script>
 var data = {};
 var myShoppingLists = "ekShoppingList";
-
+$("#sitem li").click(function () {
+ $("#sitem li").wrap("<strike>");
+});
 //function for creating new shopping list
-function newList(newList){
+function creatNewList(){
 	//localStorage.removeItem("ekShoppingList");
 	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
 if(existingEntries == null) existingEntries = {};
+var listname = $("#newList").val();
 	var dd = {};
 	dd[newList] = [];
 
  $.extend(existingEntries, dd );
 
 localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
-console.log(JSON.stringify(existingEntries));
+//console.log(JSON.stringify(existingEntries));
 }
 
 //adding item to a shopping list
@@ -68,14 +91,30 @@ function getList(){
 var keys = [];
    for(var k in existingEntries) keys.push(k);
 
-console.log(JSON.stringify(keys));
+   $.each(keys,function(i,obj) {
+       $('<li style="color:black" onclick="getListItems(\'' + obj + '\')">',{text:obj}).appendTo("#shoplists");
+   });
+//console.log(JSON.stringify(keys));
 }
 
 // lists items in shopping list name
 function getListItems(listName){
 	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
 var c = existingEntries[listName];
-console.log(JSON.stringify(c));
+$( ".new-list" ).hide();
+$( "#shoplists" ).hide();
+$('<label for="male">'+listName+'</label>').appendTo("#itemLists");
+
+c.forEach(function(obj) {
+  $('<li>',{text:obj.item + ': '+obj.quantity }).appendTo("#itemLists");
+  $('<input type="button" class="btn btn-primary" value="Del" onclick="deleteItem(\'' + listName + '\',\'id\',\'' + obj.id + '\');" />').appendTo("#itemLists");
+  //console.log(obj.item);
+});
+$('<input type="text" placeholder="Item Name" id="item">').appendTo("#itemLists");
+$('<input type="text" placeholder="Quantity" size="5" id="quantity">').appendTo("#itemLists");
+$('<input type="button" class="btn btn-primary" value="Add" onclick="addItem(\'' + listName + '\');" />').appendTo("#itemLists");
+
+//console.log(JSON.stringify(c));
 }
 
 //updates items in shopping list
@@ -94,7 +133,7 @@ function updateStatus(listName, property, value){
     localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
 }
 //delete item in shopping list
-   function deleteItem(listName, index) {
+   function deleteItem1(listName, index) {
    var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
    existingEntries[listName].splice(index,1);
 
@@ -103,7 +142,7 @@ function updateStatus(listName, property, value){
 }
 
 //to-do work on item name
-   function deleteItem1(listName, property, value) {
+   function deleteItem(listName, property, value) {
    var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
         $.each(existingEntries[listName], function(index, result) {
 
