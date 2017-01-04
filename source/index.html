@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Esther Shopping List</title>
+
+        <link rel="stylesheet" href="lib/bootstrap.min.css" />
+        <link rel="stylesheet" href="lib/jquery.ui.min.css" />
+        <link rel="stylesheet" href="lib/shoplist.css" />
+    </head>
+
+    <body class="well">
+        <div id="container">
+        <div id="header"> Esther's Shopping List </div>
+
+<div class="new-list">
+                <h3>Add List</h3>
+                <form id="list-form">
+                    <input type="text" placeholder="List Name" id="newList" />
+                    <input type="button" class="btn btn-primary" value="Add List" id="add-item-to-list" />
+                </form>
+</div>
+		<div class="task-list task-container" id="shoplists">
+                <h3>Shopping Lists</h3>
+                <ul id="display-shopping-list">
+                	<li>list 1</li>
+                	<li>list 2</li>
+                	<li>list 3</li>
+                </ul>
+         </div>
+
+            <div id="itemLists"></div>
+
+                <input type="button" class="btn btn-primary" value="Clear Data" onclick="todo.clear();" />
+
+                <div id="delete-div">
+                    Drag Here to Delete
+                </div>
+            </div>
+
+         <script type="text/javascript" src="lib/jquery.min.js"></script>
+            <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+            <script type="text/javascript" src="lib/jquery.ui.min.js"></script>
+            <script type="text/javascript" src="lib/shoplist.js"></script>
+
+			<script type="text/javascript">
+			$(document).ready(function(){
+				//alert('call function');
+                //getList();
+            });
+            </script>
+        </div>
+    </body>
+</html>

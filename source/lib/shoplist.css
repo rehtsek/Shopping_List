@@ -1,0 +1,5 @@
+li {font-sze:2em,color:black;}
+/*Create a class to notify when item has been clicked as bought or for deletion*/
+.bought {color:#d3d3d3}
+/* creat class called toBuy for unbought items*/
+.toBuy {color:black}
