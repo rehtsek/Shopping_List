@@ -2,39 +2,11 @@
 
  //alert('hello');
  $(document).on("pagebeforecreate","#index",function(){
-  //alert("pagebeforeshow event fired - pagetwo is about to be shown");
-  //$('#display-shopping-list').html("<li>Hello</li><li>World</li>");
+  
   showHomepage();
 
 });
- /*$(document).on("pagebeforeshow","#index",function(){
-  alert("pagebeforeshow event fired - pagetwo is about to be shown");
-  //$('#display-shopping-list').html("<li>Hello</li><li>World</li>");
-  //showHomepage();
-
-});*/
-
- //showHomepage();
-  //alert("I am adding item to the list");
-
-
-  /*var getList = getList();
-
-  var myShoppingList = displayShoppingList(getList);
-   console.log(myShoppingList);
-  myList = myShoppingList.shopping_lists;
-  var listItems = myShoppingList.shopping_lists_items;
-  console.log(listItems);
-    $(document).on("pagebeforecreate",function(){
-     $('#display-shopping-list').html(myList);
-    if(listItems.length > 0){
-    for(var j = 0; j < listItems.length; j++){
-
-      $( "body" ).append(listItems[j]);
-
-    }
-    }
-  });*/
+ 
 function showHomepage(){
 var shoppingList = JSON.parse(localStorage.getItem("ekShoppingList"));
 var shoppingListObject = {};
@@ -96,7 +68,8 @@ var shoppingListObject = {};
                            '<th>'+j+'</th>'+
                            '<td>'+value[i].item+'</td>'+
                            '<td>'+value[i].quantity+'</td>'+
-                           '<td><a class="delete-item"  data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+i+'"}\' href="'+value[i].id+'">delete</a></td>'+
+                           '<td><a class="delete-item"  data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+i+'"}\' href="'+value[i].id+'">delete</a>'+
+                           '<a style="margin-left: 10px;" class="purchase-item"  data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+i+'"}\' href="'+value[i].id+'">purchase</a></td>'+
                            '</tr>';
                           //'<p><span>'+value[i].item+'</span>: <span style="margin-right: 5%">'+value[i].quantity+'</span><a>delete</a></p>';
   }
@@ -207,6 +180,17 @@ $.mobile.document.on( "click", ".delete-item", function() {
   //showHomepage();
    //$("#index").enhanceWithin();
 
+
+});
+$.mobile.document.on( "click", ".purchase-item", function(event) {
+  //var newItem = $('#new-shopping-list').val();
+  event.preventDefault();
+  var itemId = $(this).data("shoppingList").item;
+  var shoppingList = $(this).data("shoppingList").shoppingList;
+  $(this).closest("tr").wrap("<strike>");
+  //$(this).closest("table").trigger("refresh");
+  console.log(itemId, shoppingList);
+  
 
 });
 // $('#display-shopping-list').html(myList);
