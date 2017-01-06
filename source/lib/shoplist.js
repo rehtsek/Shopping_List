@@ -43,13 +43,18 @@ var shoppingListObject = {};
   var htmlShoppingItem = ""; 
   $.each(shoppingList, function( key, value ){
     console.log(value);
-  htmlList += '<li><a href="#'+key+'">'+key+'</a></li>';
+  var originalKey = key;
+  var snakeCaseKey = key.split(" ");
+  if(snakeCaseKey.length > 1){
+      key = snakeCaseKey.join("_");
+  }
+  htmlList += '<li><a href="#'+key+'">'+originalKey+'</a></li>';
   var shoppingItem = '<div data-role="page" id="'+key+'">'+
                      '<header data-role="header" data-add-back-btn="true">'+
-                      '<h1>'+key+' : Shopping Items.</h1>'+
+                      '<h1>'+originalKey+' : Shopping Items.</h1>'+
                      '</header>'+
                      '<div data-role="content">'+
-                     '<h3>'+key+' : Shopping Items.</h3>'+
+                     '<h3>'+originalKey+' : Shopping Items.</h3>'+
                      '<div class="ui-field-contain">'+
                      '<fieldset data-role="controlgroup" data-type="horizontal">'+
                   //         '<legend></legend>'+
@@ -72,12 +77,30 @@ var shoppingListObject = {};
                          '</div>'+
                          '</div>'+
                       '</form>'+
-                        '<ul data-role="listview" class="list-items" id="list-items" data-theme="b">';
+                        '<table data-role="table" id="table-column-toggle" data-mode="columntoggle" '+
+                         'class="ui-responsive table-stroke">'+
+                         '<thead>'+
+                           '<tr>'+
+                             '<th data-priority="1">Index</th>'+
+                             '<th data-priority="2">Item</th>'+
+                             '<th data-priority="3">Quantity</th>'+
+                             '<th data-priority="4">Actions</th>'+
+                           '</tr>'+
+                         '</thead>'+
+                         '<tbody id="'+key+'">';
   
   for(var i = 0; i<value.length; i++){
-          shoppingItem += '<li><a href="#'+value[i].id+'">'+value[i].item+': '+value[i].quantity+'</a></li>';
+          // shoppingItem += '<li><a href="#'+value[i].id+'">'+value[i].item+': '+value[i].quantity+'</a></li>';
+          var j = i +1;
+          shoppingItem += '<tr>'+
+                           '<th>'+j+'</th>'+
+                           '<td>'+value[i].item+'</td>'+
+                           '<td>'+value[i].quantity+'</td>'+
+                           '<td><a class="delete-item"  data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+i+'"}\' href="'+value[i].id+'">delete</a></td>'+
+                           '</tr>';
+                          //'<p><span>'+value[i].item+'</span>: <span style="margin-right: 5%">'+value[i].quantity+'</span><a>delete</a></p>';
   }
-          shoppingItem += '</ul></div></div>';
+          shoppingItem += '</tbody></table></div></div>';
 
           htmlShoppingItemsData.push(shoppingItem);
  });
@@ -108,13 +131,18 @@ var shoppingListObject = {};
   //return false;
   
   var newItem = $('#new-shopping-list').val();
+  var originalItem = newItem;
+  var snakeCaseKey = newItem.split(" ");
+  if(snakeCaseKey.length > 1){
+      newItem = snakeCaseKey.join("_");
+  }
   console.log(creatNewList(newItem));
   //showHomepage();
    //$("#index").enhanceWithin();
-  var htmlList = '<li><a href="#'+newItem+'">'+newItem+'</a></li>';
+  var htmlList = '<li><a href="#'+newItem+'">'+originalItem+'</a></li>';
   var shoppingItem = '<div data-role="page" id="'+newItem+'">'+
                      '<header data-role="header" data-add-back-btn="true">'+
-                      '<h1>'+newItem+' : Shopping Items.</h1>'+
+                      '<h1>'+originalItem+' : Shopping Items.</h1>'+
                      '</header>'+
                      '<div data-role="content">'+
                      '<ul data-role="listview" data-theme="b">'+
@@ -127,8 +155,7 @@ var shoppingListObject = {};
     $( "body" ).append(shoppingItem);
     $("#display-shopping-list").listview("refresh");
     
-});                                                                                                                                                                                                                                                                                                                                                                                    ;
-//});  
+});  
 $.mobile.document.on( "click", ".add-list-item", function() { 
   //$( "#target" ).submit(function( event ) {
     var pageId = $.mobile.activePage.attr('id');
@@ -136,13 +163,22 @@ $.mobile.document.on( "click", ".add-list-item", function() {
 //return false; 
   var newItem = $("#"+pageId+"-new-list-item").val();
   var quantity = $('#'+pageId+'-quantity').val();
-  var shoppingList = $('#'+pageId+'-add-list-item').data(pageId+"List");
+  var dataName = pageId.toLowerCase();
+  var shoppingList = $('#'+pageId+'-add-list-item').data(dataName+"List");
   console.log(newItem, quantity, shoppingList);
-  return false;
-  
-  console.log(addItem(newItem, quantity, shoppingList));
   //return false;
-  var htmlList = '<li><a href="#'+newItem+'">'+newItem+'</a></li>';
+  
+  var addedItem = addItem(shoppingList, newItem, quantity);
+  var addedItemId = addedItem.id;
+  var addedItemIndex = addedItemId + 1;
+  //return false;
+  //var htmlList = '<li><a href="#'+newItem+'">'+newItem+'</a></li>';
+  var shoppingItem = '<tr>'+
+                           '<th>'+addedItemIndex+'</th>'+
+                           '<td>'+newItem+'</td>'+
+                           '<td>'+quantity+'</td>'+
+                           '<td><a class="delete-item"  data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">delete</a></td>'+
+                           '</tr>';
   /*var shoppingItem = '<div data-role="page" id="'+newItem+'">'+
                      '<header data-role="header" data-add-back-btn="true">'+
                       '<h1>'+newItem+' : Shopping Items.</h1>'+
@@ -153,13 +189,26 @@ $.mobile.document.on( "click", ".add-list-item", function() {
                      '</div>'+
                      '</div>';*/
    
-   console.log(htmlList);
-    $( htmlList ).appendTo("#list-items");
+   console.log(shoppingItem);
+    $( shoppingItem ).appendTo("#"+shoppingList);
     //$( "body" ).append(shoppingItem);
-    $("#list-items").listview("refresh");
+    $("#"+shoppingList).table("refresh");
     
 });
+$.mobile.document.on( "click", ".delete-item", function() {  
+  //var newItem = $('#new-shopping-list').val();
+  alert('you clicked delete');
 
+  var itemId = $(this).data("shoppingList").item;
+  var shoppingList = $(this).data("shoppingList").shoppingList;
+  console.log(itemId, shoppingList);
+  //return false;
+  console.log(newDeleteItem(shoppingList, itemId));
+  //showHomepage();
+   //$("#index").enhanceWithin();
+  
+    
+});            
 // $('#display-shopping-list').html(myList);
 $('#add-item-to-list').on('click', function(){
   //alert("I am adding item to the list");
@@ -192,12 +241,14 @@ if(existingEntries == null){ existingEntries = {} };
 //adding item to a shopping list 
 //require: listName
 function addItem(listName, item, quantity){
+  console.log(listName, item, quantity);
+  //return false;
   var myShoppingLists = "ekShoppingList";
-	var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+	var existingEntries = JSON.parse(localStorage.getItem("ekShoppingList"));
 	/*var entryItem = $("#item").val();
     var entryQty = $("#quantity").val();*/
     console.log(typeof existingEntries);
-    console.log(existingEntries.Alvihage);
+    console.log(existingEntries[listName]);
     //return false;
    var len = existingEntries[listName].length-1;
    if(len == -1){i=1}else{
@@ -205,12 +256,15 @@ function addItem(listName, item, quantity){
 	i = i.id;
 	i = i+1;}
 	console.log(i);
-  existingEntries[listName].push(
+  var itemToAdd = {"id": i, "item": item, "quantity": quantity, "status": "new"};
+  /*existingEntries[listName].push(
     {id: i, item: item, quantity: quantity, status: "new"}
-);
+);*/
+  existingEntries[listName].push(itemToAdd);
 
 localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
 console.log(JSON.stringify(existingEntries));
+return itemToAdd;
 }
 
 function getList(){
@@ -308,9 +362,9 @@ function updateStatus(listName, property, value){
    function deleteItem(listName, property, value) {
    var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
         $.each(existingEntries[listName], function(index, result) {
-        	
+          
             if (result[property] == value) {
-            	console.log(index);
+              console.log(index);
                 existingEntries[listName].splice(index,1);
                 return false;
             }
@@ -318,6 +372,30 @@ function updateStatus(listName, property, value){
         });   
 
     localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+}
+function newDeleteItem(listName, index) {
+
+   var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+
+   if(existingEntries[listName].splice(index,1)){
+
+      localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+      return true;
+   }
+
+   return false;
+        /*$.each(existingEntries[listName], function(index, result) {
+        	
+            if (result[property] == value) {
+            	console.log(index);
+                existingEntries[listName].splice(index,1);
+                return false;
+            }
+
+        });  */ 
+
+    
+
 }
 
 function deleteList(listName){
