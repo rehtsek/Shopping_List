@@ -2,11 +2,11 @@
 
  //alert('hello');
  $(document).on("pagebeforecreate","#index",function(){
-  
+
   showHomepage();
 
 });
- 
+
 function showHomepage(){
 var shoppingList = JSON.parse(localStorage.getItem("ekShoppingList"));
 var shoppingListObject = {};
@@ -30,8 +30,8 @@ var shoppingListObject = {};
                      '<div class="ui-field-contain">'+
                      '<fieldset data-role="controlgroup" data-type="horizontal">'+
                   //         '<legend></legend>'+
-                          '<button class="ui-shadow ui-btn ui-corner-all ui-icon-edit ui-btn-icon-right" value="'+key+'">Edit Item</button>'+
-                          '<button class="ui-shadow ui-btn ui-corner-all ui-icon-delete ui-btn-icon-right" value="'+key+'">Delete</button>'+
+                         '<button class="ui-shadow ui-btn ui-corner-all ui-icon-edit ui-btn-icon-right" value="'+key+'">Edit Shopping List</button>'+
+                         '<button class="ui-shadow ui-btn ui-corner-all ui-icon-delete ui-btn-icon-right" value="'+key+'">Delete Shopping List</button>'+
                          
                           //<a href="#" class="ui-shadow ui-btn ui-corner-all ui-icon-grid ui-btn-icon-right">Three</a>
                       '</fieldset>'+
@@ -45,7 +45,7 @@ var shoppingListObject = {};
                             '<input type="text" name="quantity" class="quantity" id="'+key+'-quantity" placeholder="qty" value="">'+
                        '</div>'+
                          '<div class="ui-block-c">'+
-                            '<a href="#" data-'+key+'-list="'+key+'" class="ui-btn ui-corner-all ui-shadow add-list-item" id="'+key+'-add-list-item">Add Item</a>'+
+                            '<a href="#" data-'+key+'-list="'+key+'" class="ui-btn ui-corner-all ui-shadow add-list-item" id="'+key+'-add-list-item">Add Item to Shopping List</a>'+
                          '</div>'+
                          '</div>'+
                       '</form>'+
@@ -60,6 +60,8 @@ var shoppingListObject = {};
                            '</tr>'+
                          '</thead>'+
                          '<tbody id="'+key+'">';
+
+
 
   for(var i = 0; i<value.length; i++){
           // shoppingItem += '<li><a href="#'+value[i].id+'">'+value[i].item+': '+value[i].quantity+'</a></li>';
@@ -190,7 +192,7 @@ $.mobile.document.on( "click", ".purchase-item", function(event) {
   $(this).closest("tr").wrap("<strike>");
   //$(this).closest("table").trigger("refresh");
   console.log(itemId, shoppingList);
-  
+
 
 });
 // $('#display-shopping-list').html(myList);
