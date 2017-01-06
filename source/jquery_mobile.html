@@ -1,0 +1,73 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+  <title>Basic mobile app</title> 
+  <meta charset="utf-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">  
+ 
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+  <!-- <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+ 
+  <script type="text/javascript" src="lib/shoplist.js"></script>
+  
+</head> 
+<body> 
+ <div data-role="page" id="index">
+  <header data-role="header">
+    <h1>Esther Sopping List</h1>
+  </header>
+   
+  <div data-role="content">
+  
+
+   <h3>Add New Item here</h3>
+   <form>
+   <div class="ui-grid-a ui-responsive">
+     <div class="ui-block-b">
+      <!-- <div class="ui-field-contain"> -->
+<!--          <label for="text-12">Enter Item Name:</label> -->
+         <input type="text" name="new-shopping-list" id="new-shopping-list" placeholder="Add New Shopping Item" value="">
+<!--     </div> -->
+   </div>
+
+     <div class="ui-block-c">
+<!--     <div class="ui-field-contain"> -->
+         
+         <a href="#" class="ui-btn ui-corner-all ui-shadow" id="add-shopping-item">Add Item</a>
+<!--     </div> -->
+   </div>
+</div>
+</form>
+
+  
+ 	 <ul id="display-shopping-list" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Search fruits..." data-inset="true" style="width: 50%">
+   
+	</ul>
+    
+    <p><a href="#about" data-transition="slide" data-role="button" data-theme="c">About us</a></p>
+  </div>
+   
+  <footer data-role="footer">
+    <h2>&copy; footer here.</h2>
+  </footer>
+</div>
+ 
+<div data-role="page" id="about">
+  <header data-role="header">
+    <h1>Page 2 Here</h1>
+  </header>
+   
+  <div data-role="content">
+    <p>just some extra content as well.</p>
+    <p>I mean, you can <a data-rel="back" data-transition="slide" href="#index">go back</a> at any time.</p>
+  </div>
+</div>
+<!--  <script type="text/javascript" src="lib/jquery.min.js"></script>
+            <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+            <script type="text/javascript" src="lib/jquery.ui.min.js"></script> -->
+            
+</body>
+</html>
