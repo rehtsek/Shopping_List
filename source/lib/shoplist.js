@@ -33,68 +33,68 @@ var shoppingListObject = {};
 
   $.mobile.document.on( "input", "#"+key+"-new-list-item", function() {
 var availableTags = [
-  "Egg",
-  "Butter",
-  "Orange",
-  "Cheese",
-  "Meat",
-  "Pasta",
-  "Rice",
-  "Oil",
-  "Cereal",
-  "Bread",
-  "Meat",
-  "Fish",
-  "Chicken",
-  "Turkey Breast",
-  "Salmon",
-  "Flour",
-  "Mustard",
-  "Tomatoes",
-  "Pepper",
-  "Salt",
-  "Peas",
-  "Shrimp",
-  "Broccoli",
-  "Spinach",
-  "Carrot",
-  "Oats",
-  "Juice",
-  "Ice Cream",
-  "Frozen Yogurt",
-  "Peanuts",
-  "Walnuts",
-  "Chocolate",
-  "Biscuit",
-  "Banana",
-  "Oranges",
-  "Mangoes",
-  "Potatoes",
-  "Tea",
-  "Water",
-  "Cauliflower",
-  "Detergent",
-  "Milk",
-  "Sugar",
-  "Salt",
-  "Soap",
-  "Cucumber",
-  "Lettuce",
-  "Onions",
-  "Apple",
-  "Avocado",
-  "Berries",
-  "Baked Beans",
-  "Vinegar",
-  "Mayonaise",
-  "Honey",
-  "Ketchup",
-  "Jam",
-  "Crab",
-  "Shampoo",
-  "Toothpaste",
-  "Toilet Paper",
-  "Paper Towel"
+"Egg",
+"Butter",
+"Orange",
+"Cheese",
+"Meat",
+"Pasta",
+"Rice",
+"Oil",
+"Cereal",
+"Bread",
+"Meat",
+"Fish",
+"Chicken",
+"Turkey Breast",
+"Salmon",
+"Flour",
+"Mustard",
+"Tomatoes",
+"Pepper",
+"Salt",
+"Peas",
+"Shrimp",
+"Broccoli",
+"Spinach",
+"Carrot",
+"Oats",
+"Juice",
+"Ice Cream",
+"Frozen Yogurt",
+"Peanuts",
+"Walnuts",
+"Chocolate",
+"Biscuit",
+"Banana",
+"Oranges",
+"Mangoes",
+"Potatoes",
+"Tea",
+"Water",
+"Cauliflower",
+"Detergent",
+"Milk",
+"Sugar",
+"Salt",
+"Soap",
+"Cucumber",
+"Lettuce",
+"Onions",
+"Apple",
+"Avocado",
+"Berries",
+"Baked Beans",
+"Vinegar",
+"Mayonaise",
+"Honey",
+"Ketchup",
+"Jam",
+"Crab",
+"Shampoo",
+"Toothpaste",
+"Toilet Paper",
+"Paper Towel"
 ];
 $( "#"+key+"-new-list-item" ).autocomplete({
 source: availableTags
@@ -260,6 +260,9 @@ function refreshPage() {
   $.mobile.document.on( "click", "#add-shopping-item", function() {
 
   var newItem = $('#new-shopping-list').val();
+  if(newItem == ''){
+    return false;
+  }
   var originalItem = newItem;
   var snakeCaseKey = newItem.split(" ");
   if(snakeCaseKey.length > 1){
@@ -278,7 +281,7 @@ function refreshPage() {
                     '<td><a  class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-notext ui-corner-all"  style="color: red;" data-shopping-list=\'{"shoppingList":"'+newItem+'", "count":"'+newItem+'"}\' href="#'+newItem+'Dialog"></a>'+
                     '&nbsp;<a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-notext ui-corner-all"  style="" data-shopping-list=\'{"shoppingList":"'+newItem+'", "count":"'+newItem+'"}\' href="#'+newItem+'Edit"></a></td>'+
               '</tr>';
-
+  
   var shoppingItem = '<div data-role="page" id="'+newItem+'">'+
                      '<header data-role="header" data-add-back-btn="true">'+
                       '<h1>'+originalItem+' : Shopping Items.</h1>'+
@@ -343,6 +346,7 @@ function refreshPage() {
     $( "body" ).append(htmlDialog);
     $( "body" ).append(editDialog);
     $("#display-shopping-list").trigger("refresh");
+    //showHomepage();
 
 });
   $.mobile.document.on( "click", ".delete-shopping-list", function() {
@@ -387,7 +391,7 @@ function refreshPage() {
 
 
 });
-
+  
 $.mobile.document.on( "click", ".add-list-item", function() {
   //$( "#target" ).submit(function( event ) {
     var pageId = $.mobile.activePage.attr('id');
@@ -407,7 +411,7 @@ $.mobile.document.on( "click", ".add-list-item", function() {
       $('#'+shoppingList+'-'+newItem+'Quantity').text(addedItem.quantity);
       return false;
   }
-
+  
   var addedItemId = addedItem.id;
 console.log(addedItemId);
 
@@ -420,22 +424,26 @@ console.log(addedItemId);
                            '<td id="'+shoppingList+'-'+newItem+'Quantity">'+quantity+'</td>'+
                            '<td><a class="delete-item"  style="margin-right: 5px; color: red;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">delete</a>'+
                            '<a class="purchase-item"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">purchase</a>'+
-                           '<a class="edit-quantity"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">edit</a></td>'+
+                           '<a class="edit-quantity"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="#'+shoppingList+'Edit'+newItem+'">edit</a></td>'+
                            '</tr>';
-  /*var shoppingItem = '<div data-role="page" id="'+newItem+'">'+
-                     '<header data-role="header" data-add-back-btn="true">'+
-                      '<h1>'+newItem+' : Shopping Items.</h1>'+
-                     '</header>'+
-                     '<div data-role="content">'+
-                     '<ul data-role="listview" data-theme="b">'+
-                     '</ul>'+
-                     '</div>'+
-                     '</div>';*/
+ 
+  var editQuantity = '<div data-role="page" data-overlay-theme="a" data-dialog="true" id="'+shoppingList+'Edit'+newItem+'">'+
+                '<div data-role="header">'+
+                  '<h1>Change Shopping Item Quantity!</h1>'+
+                '</div>'+
+                '<div data-role="main" class="ui-content">'+
+                  '<p>You are about to change '+newItem+' of quantity '+quantity+'. Enter new quantity below</p>'+
+                  '<input type="number" name="edit-shopping-list-item" id="update'+shoppingList+'-'+newItem+'" placeholder="quantity" value="">'+
+                  '<button class="edit-shopping-list-item ui-btn ui-btn-inline" id="update'+shoppingList+'-'+newItem+'Btn" style="background-color: green; color: white;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+newItem+'", "quantity":"'+quantity+'"}\'>save</button>'+
+                  '<a class="ui-btn ui-btn-inline" data-rel="back" ref="#'+shoppingList+'Edit'+newItem+'">cancel</a>'+
+                '</div>'+
+              '</div>';
 
    console.log(shoppingItem);
     //$( shoppingItem ).appendTo("#"+shoppingList).trigger( "create" );
     $( shoppingItem ).appendTo('tbody[id='+shoppingList+']').trigger( "create" );
-    //$( "body" ).append(shoppingItem);
+    $( "body" ).append(editQuantity);
+    //showHomepage();
     //$("#"+shoppingList).table("refresh");
 
 });
@@ -511,7 +519,7 @@ $.mobile.document.on( "click", ".edit-shopping-list-item", function() {
     console.log(shoppingList, shoppingListItem, newQunatity);
     //return false;
     console.log(updateQuantity(shoppingList, shoppingListItem, newQunatity));
-    showHomepage();
+    //showHomepage();
     $('#index').trigger('refresh');
     $('#'+shoppingList+'-'+shoppingListItem+'Quantity').text(newQunatity);
 
@@ -582,7 +590,7 @@ function addItem(listName, item, quantity){
 
   localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
   console.log(JSON.stringify(existingEntries));
-  showHomepage();
+  //showHomepage();
   $('#index').trigger('refresh');
     return itemToAdd;
 }
