@@ -15,9 +15,11 @@ var shoppingListObject = {};
   var htmlShoppingItemsData = [];
   var htmlDialogData = [];
   var editDialogData = [];
+  var editQuantityData = [];
   var htmlList = "";
   var htmlDialog = "";
   var editDialog = "";
+  var editQuantity = "";
   var htmlShoppingItem = "";
   var index = 0;
   $.each(shoppingList, function( key, value ){
@@ -31,28 +33,68 @@ var shoppingListObject = {};
 
   $.mobile.document.on( "input", "#"+key+"-new-list-item", function() {
 var availableTags = [
-"milk",
-"apple",
-"orange",
-"banana",
-"egg",
-"C++",
-"Clojure",
-"COBOL",
-"ColdFusion",
-"Erlang",
-"Fortran",
-"Groovy",
-"Haskell",
-"Java",
-"JavaScript",
-"Lisp",
-"Perl",
-"PHP",
-"Python",
-"Ruby",
-"Scala",
-"Scheme"
+  "Egg",
+  "Butter",
+  "Orange",
+  "Cheese",
+  "Meat",
+  "Pasta",
+  "Rice",
+  "Oil",
+  "Cereal",
+  "Bread",
+  "Meat",
+  "Fish",
+  "Chicken",
+  "Turkey Breast",
+  "Salmon",
+  "Flour",
+  "Mustard",
+  "Tomatoes",
+  "Pepper",
+  "Salt",
+  "Peas",
+  "Shrimp",
+  "Broccoli",
+  "Spinach",
+  "Carrot",
+  "Oats",
+  "Juice",
+  "Ice Cream",
+  "Frozen Yogurt",
+  "Peanuts",
+  "Walnuts",
+  "Chocolate",
+  "Biscuit",
+  "Banana",
+  "Oranges",
+  "Mangoes",
+  "Potatoes",
+  "Tea",
+  "Water",
+  "Cauliflower",
+  "Detergent",
+  "Milk",
+  "Sugar",
+  "Salt",
+  "Soap",
+  "Cucumber",
+  "Lettuce",
+  "Onions",
+  "Apple",
+  "Avocado",
+  "Berries",
+  "Baked Beans",
+  "Vinegar",
+  "Mayonaise",
+  "Honey",
+  "Ketchup",
+  "Jam",
+  "Crab",
+  "Shampoo",
+  "Toothpaste",
+  "Toilet Paper",
+  "Paper Towel"
 ];
 $( "#"+key+"-new-list-item" ).autocomplete({
 source: availableTags
@@ -89,8 +131,8 @@ source: availableTags
                 '</div>'+
               '</div>';
   var shoppingItem = '<div data-role="page" id="'+key+'">'+
-                     '<header data-role="header" data-add-back-btn="true">'+
-                      '<h1>'+originalKey+' : Shopping Items.</h1>'+
+                     '<header data-role="header" href="#index" data-add-back-btn="true">'+
+                      '<h1><span><a href="#index" title="go to home">'+originalKey+' : Shopping Items.</a></span></h1>'+
                      '</header>'+
                      '<div data-role="content">'+
                      // '<h3>'+originalKey+' : Shopping Items.</h3>'+
@@ -102,10 +144,10 @@ source: availableTags
                       '<form name="'+key+'" id="'+key+'">'+
                        '<div class="ui-grid-b ui-responsive">'+
                        '<div class="ui-block-a" style="margin-right: 5px;">'+
-                            '<input type="text" name="new-shopping-list" class="new-list-item" id="'+key+'-new-list-item" placeholder="add new item to list" value="">'+
+                            '<input type="text" name="new-shopping-list" class="new-list-item" id="'+key+'-new-list-item" placeholder="add new item to list" value="" required>'+
                        '</div>'+
                        '<div class="ui-block-b">'+
-                            '<input type="text" name="quantity" class="quantity" id="'+key+'-quantity" placeholder="qty" value="">'+
+                            '<input type="text" name="quantity" class="quantity" id="'+key+'-quantity" placeholder="qty" value="" required>'+
                        '</div>'+
                          '<div class="ui-block-c">'+
                             '<a href="#" data-'+key+'-list="'+key+'" class="ui-btn ui-corner-all ui-shadow add-list-item" id="'+key+'-add-list-item">Add Item</a>'+
@@ -134,17 +176,32 @@ source: availableTags
           shoppingItem += '<tr class="'+purchased+'">'+
                            '<th>'+j+'</th>'+
                            '<td>'+value[i].item+'</td>'+
-                           '<td id="'+value[i].item+'Quantity">'+value[i].quantity+'</td>'+
+                           '<td id="'+key+'-'+value[i].item+'Quantity">'+value[i].quantity+'</td>'+
                            '<td><a class="delete-item"  style="margin-right: 5px; color: red;" data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+value[i].id+'"}\' href="'+value[i].item+'">delete</a>'+
-                           '<a class="purchase-item"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+value[i].id+'"}\' href="'+value[i].item+'">purchase</a></td>'+
+                           '<a class="purchase-item"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+value[i].id+'"}\' href="'+value[i].item+'">purchase</a>'+
+                           '<a class="edit-quantity"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+value[i].id+'"}\' href="#'+key+'Edit'+value[i].item+'">edit</a></td>'+
                            '</tr>';
-                          //'<p><span>'+value[i].item+'</span>: <span style="margin-right: 5%">'+value[i].quantity+'</span><a>delete</a></p>';
+                            //'<p><span>'+value[i].item+'</span>: <span style="margin-right: 5%">'+value[i].quantity+'</span><a>delete</a></p>';
+      editQuantity = '<div data-role="page" data-overlay-theme="a" data-dialog="true" id="'+key+'Edit'+value[i].item+'">'+
+                '<div data-role="header">'+
+                  '<h1>Change Shopping Item Quantity!</h1>'+
+                '</div>'+
+                '<div data-role="main" class="ui-content">'+
+                  '<p>You are about to change '+value[i].item+' of quantity '+value[i].quantity+'. Enter new quantity below</p>'+
+                  '<input type="number" name="edit-shopping-list-item" id="update'+key+'-'+value[i].item+'" placeholder="quantity" value="">'+
+                  '<button class="edit-shopping-list-item ui-btn ui-btn-inline" id="update'+key+'-'+value[i].item+'Btn" style="background-color: green; color: white;" data-shopping-list=\'{"shoppingList":"'+key+'", "item":"'+value[i].item+'", "quantity":"'+value[i].quantity+'"}\'>save</button>'+
+                  '<a class="ui-btn ui-btn-inline" data-rel="back" ref="#'+key+'Edit'+value[i].item+'">cancel</a>'+
+                '</div>'+
+              '</div>';
+
+              editQuantityData.push(editQuantity);
   }
           shoppingItem += '</tbody></table></div></div>';
 
           htmlShoppingItemsData.push(shoppingItem);
           htmlDialogData.push(htmlDialog);
           editDialogData.push(editDialog);
+          //editQuantityData.push(editQuantity);
  });
  var shoppingListObject = {
   'shopping_lists' : htmlList,
@@ -169,6 +226,13 @@ source: availableTags
     for(var j = 0; j < listItems.length; j++){
 
       $( "body" ).append(listItems[j]);
+
+    }
+  }
+  if(editQuantityData.length > 0){
+    for(var j = 0; j < editQuantityData.length; j++){
+       console.log(editQuantityData[j]);
+      $( "body" ).append(editQuantityData[j]);
 
     }
   }
@@ -214,15 +278,43 @@ function refreshPage() {
                     '<td><a  class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-notext ui-corner-all"  style="color: red;" data-shopping-list=\'{"shoppingList":"'+newItem+'", "count":"'+newItem+'"}\' href="#'+newItem+'Dialog"></a>'+
                     '&nbsp;<a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-notext ui-corner-all"  style="" data-shopping-list=\'{"shoppingList":"'+newItem+'", "count":"'+newItem+'"}\' href="#'+newItem+'Edit"></a></td>'+
               '</tr>';
+
   var shoppingItem = '<div data-role="page" id="'+newItem+'">'+
                      '<header data-role="header" data-add-back-btn="true">'+
                       '<h1>'+originalItem+' : Shopping Items.</h1>'+
                      '</header>'+
                      '<div data-role="content">'+
-                     '<ul data-role="listview" data-theme="b">'+
-                     '</ul>'+
-                     '</div>'+
-                     '</div>';
+                     // '<h3>'+originalKey+' : Shopping Items.</h3>'+
+                     '<div class="ui-field-contain">'+
+                     '<fieldset data-role="controlgroup" data-type="horizontal">'+
+                     //<a href="#" class="ui-shadow ui-btn ui-corner-all ui-icon-grid ui-btn-icon-right">Three</a>
+                      '</fieldset>'+
+                      '</div>'+
+                      '<form name="'+newItem+'" id="'+newItem+'">'+
+                       '<div class="ui-grid-b ui-responsive">'+
+                       '<div class="ui-block-a" style="margin-right: 5px;">'+
+                            '<input type="text" name="new-shopping-list" class="new-list-item" id="'+newItem+'-new-list-item" placeholder="add new item to list" value="" required>'+
+                       '</div>'+
+                       '<div class="ui-block-b">'+
+                            '<input type="text" name="quantity" class="quantity" id="'+newItem+'-quantity" placeholder="qty" value="" required>'+
+                       '</div>'+
+                         '<div class="ui-block-c">'+
+                            '<a href="#" data-'+newItem+'-list="'+newItem+'" class="ui-btn ui-corner-all ui-shadow add-list-item" id="'+newItem+'-add-list-item">Add Item</a>'+
+                         '</div>'+
+                         '</div>'+
+                      '</form>'+
+                        '<table data-role="table" id="table-column-toggle" data-mode="columntoggle" '+
+                         'class="ui-responsive table-stroke">'+
+                         '<thead>'+
+                           '<tr>'+
+                             '<th data-priority="1">Index</th>'+
+                             '<th data-priority="2">Item</th>'+
+                             '<th data-priority="3">Quantity</th>'+
+                             '<th data-priority="4">Actions</th>'+
+                           '</tr>'+
+                         '</thead>'+
+                         '<tbody id="'+newItem+'">'+
+                         '</tbody></table></div></div>';
   var htmlDialog = '<div data-role="page" data-overlay-theme="a" data-dialog="true" id="'+newItem+'Dialog">'+
                 '<div data-role="header">'+
                   '<h1>Confirm Deltet!</h1>'+
@@ -295,6 +387,7 @@ function refreshPage() {
 
 
 });
+
 $.mobile.document.on( "click", ".add-list-item", function() {
   //$( "#target" ).submit(function( event ) {
     var pageId = $.mobile.activePage.attr('id');
@@ -308,11 +401,13 @@ $.mobile.document.on( "click", ".add-list-item", function() {
   //return false;
 
   var addedItem = addItem(shoppingList, newItem, quantity);
+  console.log(addedItem);
   if(addedItem.status == 'updated'){
-      $('#'+newItem+'Quantity').text(addedItem.quantity);
+
+      $('#'+shoppingList+'-'+newItem+'Quantity').text(addedItem.quantity);
       return false;
   }
-  console.log(addedItem);
+
   var addedItemId = addedItem.id;
 console.log(addedItemId);
 
@@ -322,9 +417,10 @@ console.log(addedItemId);
   var shoppingItem = '<tr>'+
                            '<th>'+addedItemIndex+'</th>'+
                            '<td>'+newItem+'</td>'+
-                           '<td id="'+newItem+'Quantity">'+quantity+'</td>'+
+                           '<td id="'+shoppingList+'-'+newItem+'Quantity">'+quantity+'</td>'+
                            '<td><a class="delete-item"  style="margin-right: 5px; color: red;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">delete</a>'+
-                           '<a class="purchase-item"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">purchase</a></td>'+
+                           '<a class="purchase-item"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">purchase</a>'+
+                           '<a class="edit-quantity"  style="margin-left: 5px;" data-shopping-list=\'{"shoppingList":"'+shoppingList+'", "item":"'+addedItemId+'"}\' href="'+newItem+'">edit</a></td>'+
                            '</tr>';
   /*var shoppingItem = '<div data-role="page" id="'+newItem+'">'+
                      '<header data-role="header" data-add-back-btn="true">'+
@@ -359,6 +455,8 @@ $.mobile.document.on( "click", ".delete-item", function() {
   tr.fadeOut(400, function(){
     tr.remove();
   });
+  showHomepage();
+  $('#index').trigger('refresh');
   return false;
 
 });
@@ -402,6 +500,27 @@ function creatNewList(newItem){
   console.log(existingEntries);
   return existingEntries;
 }
+$.mobile.document.on( "click", ".edit-shopping-list-item", function() {
+    //var itemId = $(this).data("shoppingList").item;
+
+    var shoppingList = $(this).data("shoppingList").shoppingList;
+    var shoppingListItem = $(this).data("shoppingList").item;
+    //var itemQuantity = $(this).data("shoppingList").shoppingList;
+    console.log(shoppingList, shoppingListItem);
+    var newQunatity = $("#update"+shoppingList+"-"+shoppingListItem).val();
+    console.log(shoppingList, shoppingListItem, newQunatity);
+    //return false;
+    console.log(updateQuantity(shoppingList, shoppingListItem, newQunatity));
+    showHomepage();
+    $('#index').trigger('refresh');
+    $('#'+shoppingList+'-'+shoppingListItem+'Quantity').text(newQunatity);
+
+    //$.mobile.back();
+    $.mobile.back();
+    return false;
+
+
+});
 
 //adding item to a shopping list
 //require: listName
@@ -437,7 +556,7 @@ function addItem(listName, item, quantity){
                     }
                     return returnData;
                     //break;
-                    deleteItem(listName, itemIndex);
+                    //deleteItem(listName, itemIndex);
 
               }
           }
@@ -551,6 +670,31 @@ function updateStatus(listName, value){
 
                 existingEntries[listName][index].status = "new";
               }
+
+                return false;
+            }
+
+        });
+
+
+    localStorage.setItem(myShoppingLists, JSON.stringify(existingEntries));
+    return existingEntries[listName];
+}
+function updateQuantity(listName, item, quantity){
+   var existingEntries = JSON.parse(localStorage.getItem(myShoppingLists));
+   console.log(existingEntries[listName]);
+   //return;
+   $.each(existingEntries[listName], function(index, result) {
+
+            if (result.item == item) {
+              console.log(index, result);
+              existingEntries[listName][index].quantity = quantity;
+              /*if(existingEntries[listName][index].status == 'new'){
+                existingEntries[listName][index].status = "bought";
+              }else if(existingEntries[listName][index].status == 'bought'){
+
+                existingEntries[listName][index].status = "new";
+              }*/
 
                 return false;
             }
