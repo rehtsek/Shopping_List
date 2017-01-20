@@ -295,6 +295,7 @@ function refreshPage() {
   }
   var shoppingLists = creatNewList(newItem);
   var totalShoppingList = Object.keys(shoppingLists).length;
+
   // var totalShoppingList = shoppingLists.length;
   //showHomepage();
    //$("#index").enhanceWithin();
@@ -380,6 +381,76 @@ function refreshPage() {
     $( "body" ).append(htmlDialog);
     $( "body" ).append(editDialog);
     $('#new-shopping-list').val(""); 
+     $.mobile.document.on( "input", "#"+newItem+"-new-list-item", function() {
+var availableTags = [
+"Egg",
+"Butter",
+"Orange",
+"Cheese",
+"Meat",
+"Pasta",
+"Rice",
+"Oil",
+"Cereal",
+"Bread",
+"Meat",
+"Fish",
+"Chicken",
+"Turkey Breast",
+"Salmon",
+"Flour",
+"Mustard",
+"Tomatoes",
+"Pepper",
+"Salt",
+"Peas",
+"Shrimp",
+"Broccoli",
+"Spinach",
+"Carrot",
+"Oats",
+"Juice",
+"Ice Cream",
+"Frozen Yogurt",
+"Peanuts",
+"Walnuts",
+"Chocolate",
+"Biscuit",
+"Banana",
+"Oranges",
+"Mangoes",
+"Potatoes",
+"Tea",
+"Water",
+"Cauliflower",
+"Detergent",
+"Milk",
+"Sugar",
+"Salt",
+"Soap",
+"Cucumber",
+"Lettuce",
+"Onions",
+"Apple",
+"Avocado",
+"Berries",
+"Baked Beans",
+"Vinegar",
+"Mayonaise",
+"Honey",
+"Pineapple",
+"Ketchup",
+"Jam",
+"Crab",
+"Shampoo",
+"Toothpaste",
+"Toilet Paper",
+"Paper Towel"
+];
+$( "#"+newItem+"-new-list-item" ).autocomplete({
+source: availableTags
+});
+});
     $("#display-shopping-list").trigger("refresh");
     //showHomepage();
 
