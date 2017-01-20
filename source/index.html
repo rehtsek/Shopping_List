@@ -42,29 +42,25 @@
   <div data-role="content">
 
 
-   <h3>Add New Item here</h3>
-   <form>
-   <div class="ui-grid-a ui-responsive">
-     <div class="ui-block-b">
-      <!-- <div class="ui-field-contain"> -->
-<!--          <label for="text-12">Enter Item Name:</label> -->
-         <input type="text" name="new-shopping-list" id="new-shopping-list" placeholder="Add New Shopping Item" value="">
-<!--     </div> -->
-   </div>
+   
+   <div class="ui-content">
+    <form method="get" action="">
+      
+      <fieldset class="ui-field-contain">
+        <label for="search" style="color: green; font-weight: bold;">New Shopping Item:</label>
+        
+        <input type="text" name="new-shopping-list" id="new-shopping-list" placeholder="Add New Shopping Item" value="">
+      </fieldset>
+      <fieldset class="ui-field-contain">
+        <label for="submit-btn"></label>
+        <a href="#" class="ui-btn ui-shadow" id="add-shopping-item">save shopping list</a>
+        
+      </fieldset>
+    </form>
+  
 
-     <div class="ui-block-c">
-<!--     <div class="ui-field-contain"> -->
-         
-         <a href="#" class="ui-btn ui-corner-all ui-shadow" id="add-shopping-item">+</a>
-<!--     </div> -->
-   </div>
-</div>
-</form>
+  <a href="#" class="ui-btn ui-btn-inline" id="clear-shopping-list" style="color: red">Reset Shopping List Data</a>
 
-
- 	 <!-- <ul id="display-shopping-list" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Search fruits..." data-inset="true" style="width:">
-   
-	</ul> -->
   <table data-role="table" id="table-custom-2" data-mode="columntoggle" class="ui-body-d ui-shadow table-stripe ui-responsive" data-column-btn-theme="b" data-column-btn-text="Columns to display..." data-column-popup-theme="a">
          <thead>
            <tr class="ui-bar-d">
@@ -82,7 +78,7 @@
          </tbody>
        </table>
 
-
+	</div>
     <!-- <p><a href="#about" data-transition="slide" data-role="button" data-theme="c">About us</a></p> -->
   </div>
 
@@ -91,16 +87,7 @@
   </footer>
 </div>
 
-<div data-role="page" id="about">
-  <header data-role="header">
-    <h1>Page 2 Here</h1>
-  </header>
 
-  <div data-role="content">
-    <p>just some extra content as well.</p>
-    <p>I mean, you can <a data-rel="back" data-transition="slide" href="#index">go back</a> at any time.</p>
-  </div>
-</div>
 <!--  <script type="text/javascript" src="lib/jquery.min.js"></script>
             <script type="text/javascript" src="lib/bootstrap.min.js"></script>
             <script type="text/javascript" src="lib/jquery.ui.min.js"></script> -->

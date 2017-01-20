@@ -1,12 +1,24 @@
 //$(document).ready(function(){
 
  //alert('hello');
+ $.mobile.document.on( "click", "#clear-shopping-list", function(event) {
+	event.preventDefault();
+	
+	localStorage.removeItem("ekShoppingList");
+	$('#display-shopping-list').empty();
+	//$('body').empty();
+	showHomepage();
+	$("#index").trigger("refresh");
+	
+	//return false;
+ });
  $.mobile.document.on("pagebeforecreate","#index",function(){
 //localStorage.removeItem("ekShoppingList");
   showHomepage();
 
 });
 function showHomepage(){
+	console.log('function called');
 var shoppingList = JSON.parse(localStorage.getItem("ekShoppingList"));
 if($.isEmptyObject(shoppingList)){
   return false;
@@ -88,6 +100,7 @@ var availableTags = [
 "Vinegar",
 "Mayonaise",
 "Honey",
+"Pineapple",
 "Ketchup",
 "Jam",
 "Crab",
@@ -137,22 +150,30 @@ source: availableTags
                      '<div data-role="content">'+
                      // '<h3>'+originalKey+' : Shopping Items.</h3>'+
                      '<div class="ui-field-contain">'+
-                     '<fieldset data-role="controlgroup" data-type="horizontal">'+
-                     //<a href="#" class="ui-shadow ui-btn ui-corner-all ui-icon-grid ui-btn-icon-right">Three</a>
-                      '</fieldset>'+
-                      '</div>'+
-                      '<form name="'+key+'" id="'+key+'">'+
-                       '<div class="ui-grid-b ui-responsive">'+
-                       '<div class="ui-block-a" style="margin-right: 5px;">'+
-                            '<input type="text" name="new-shopping-list" class="new-list-item" id="'+key+'-new-list-item" placeholder="add new item to list" value="" required>'+
-                       '</div>'+
-                       '<div class="ui-block-b">'+
-                            '<input type="text" name="quantity" class="quantity" id="'+key+'-quantity" placeholder="qty" value="" required>'+
-                       '</div>'+
-                         '<div class="ui-block-c">'+
+                     
+                      // <fieldset class="ui-field-contain">
+                      //   <label for="search" style="color: green; font-weight: bold;">New Shopping Item:</label>
+                        
+                      //   <input type="text" name="new-shopping-list" id="new-shopping-list" placeholder="Add New Shopping Item" value="">
+                      // </fieldset>
+                      // <fieldset class="ui-field-contain">
+                      //   <label for="submit-btn"></label>
+                      //   <a href="#" class="ui-btn ui-shadow" id="add-shopping-item">save shopping list</a>
+                        
+                      // </fieldset>
+                      '<form name="'+key+'" id="'+key+'" class="shoppinglist-item-form" >'+
+                       '<fieldset class="ui-field-contain">'+
+                        '<label for="'+key+'-new-list-item" style="color: green; font-weight: bold;">Item Name:</label>'+
+                        '<input type="text" name="new-shopping-list" class="new-list-item" id="'+key+'-new-list-item" placeholder="add new item to list" value="" required>'+
+                       '</fieldset>'+
+                       '<fieldset class="ui-field-contain">'+
+                            '<label for="'+key+'-quantity" style="color: green; font-weight: bold;">Item Quantity:</label>'+
+                            '<input type="text" name="quantity" class="quantity" id="'+key+'-quantity" placeholder="quantity" value="" required>'+
+                       '</fieldset>'+
+                       '<fieldset class="ui-field-contain">'+
+                            '<label for="" style="color: green; font-weight: bold;"></label>'+
                             '<a href="#" data-'+key+'-list="'+key+'" class="ui-btn ui-corner-all ui-shadow add-list-item" id="'+key+'-add-list-item">Add Item</a>'+
-                         '</div>'+
-                         '</div>'+
+                       '</fieldset>'+
                       '</form>'+
                         '<table data-role="table" id="table-column-toggle" data-mode="columntoggle" '+
                          'class="ui-responsive table-stroke">'+
@@ -213,7 +234,7 @@ source: availableTags
   var listItems = shoppingListObject.shopping_lists_items;
   var myListDialogs = shoppingListObject.shopping_lists_dialog;
   //console.log(myList);
-
+	 
      $('#display-shopping-list').html(myList);
      if(myListDialogs.length > 0){
     for(var j = 0; j < myListDialogs.length; j++){
@@ -260,7 +281,11 @@ function refreshPage() {
   $.mobile.document.on( "click", "#add-shopping-item", function() {
 
   var newItem = $('#new-shopping-list').val();
+  var validList = /^[a-zA-Z]+$/;
   if(newItem == ''){
+    return false;
+  }
+  if(!validList.test(newItem)){
     return false;
   }
   var originalItem = newItem;
@@ -288,12 +313,21 @@ function refreshPage() {
                      '</header>'+
                      '<div data-role="content">'+
                      // '<h3>'+originalKey+' : Shopping Items.</h3>'+
-                     '<div class="ui-field-contain">'+
-                     '<fieldset data-role="controlgroup" data-type="horizontal">'+
-                     //<a href="#" class="ui-shadow ui-btn ui-corner-all ui-icon-grid ui-btn-icon-right">Three</a>
-                      '</fieldset>'+
-                      '</div>'+
-                      '<form name="'+newItem+'" id="'+newItem+'">'+
+                     '<form name="'+newItem+'" id="'+newItem+'" class="shoppinglist-item-form">'+
+                       '<fieldset class="ui-field-contain">'+
+                        '<label for="'+newItem+'-new-list-item" style="color: green; font-weight: bold;">Item Name:</label>'+
+                        '<input type="text" name="new-shopping-list" class="new-list-item" id="'+newItem+'-new-list-item" placeholder="add new item to list" value="" required>'+
+                       '</fieldset>'+
+                       '<fieldset class="ui-field-contain">'+
+                            '<label for="'+newItem+'-quantity" style="color: green; font-weight: bold;">Item Quantity:</label>'+
+                            '<input type="text" name="quantity" class="quantity" id="'+newItem+'-quantity" placeholder="quantity" value="" required>'+
+                       '</fieldset>'+
+                       '<fieldset class="ui-field-contain">'+
+                            '<label for="" style="color: green; font-weight: bold;"></label>'+
+                            '<a href="#" data-'+newItem+'-list="'+newItem+'" class="ui-btn ui-corner-all ui-shadow add-list-item" id="'+newItem+'-add-list-item">Add Item</a>'+
+                       '</fieldset>'+
+                      '</form>'+
+                      /*'<form name="'+newItem+'" id="'+newItem+'">'+
                        '<div class="ui-grid-b ui-responsive">'+
                        '<div class="ui-block-a" style="margin-right: 5px;">'+
                             '<input type="text" name="new-shopping-list" class="new-list-item" id="'+newItem+'-new-list-item" placeholder="add new item to list" value="" required>'+
@@ -305,7 +339,7 @@ function refreshPage() {
                             '<a href="#" data-'+newItem+'-list="'+newItem+'" class="ui-btn ui-corner-all ui-shadow add-list-item" id="'+newItem+'-add-list-item">Add Item</a>'+
                          '</div>'+
                          '</div>'+
-                      '</form>'+
+                      '</form>'+*/
                         '<table data-role="table" id="table-column-toggle" data-mode="columntoggle" '+
                          'class="ui-responsive table-stroke">'+
                          '<thead>'+
@@ -345,6 +379,7 @@ function refreshPage() {
     $( "body" ).append(shoppingItem);
     $( "body" ).append(htmlDialog);
     $( "body" ).append(editDialog);
+    $('#new-shopping-list').val(""); 
     $("#display-shopping-list").trigger("refresh");
     //showHomepage();
 
@@ -393,15 +428,29 @@ function refreshPage() {
 });
   
 $.mobile.document.on( "click", ".add-list-item", function() {
-  //$( "#target" ).submit(function( event ) {
+    //$( "#target" ).submit(function( event ) {
     var pageId = $.mobile.activePage.attr('id');
-//alert('sounds good');
-//return false;
-  var newItem = $("#"+pageId+"-new-list-item").val();
-  var quantity = $('#'+pageId+'-quantity').val();
+    //alert('sounds good');
+   //return false;
+   var validItem = /^[a-zA-Z]+$/;
+   var validQuantity = /^\d+$/;
+   
+   //var result = /^hello/.test(str);
+   var newItem = $("#"+pageId+"-new-list-item").val();
+   var quantity = $('#'+pageId+'-quantity').val();
+   if(newItem == "" || quantity == ""){
+    
+        return false;
+  
+  }
+  if(!validItem.test(newItem) || !validQuantity.test(quantity)){
+
+        return false;
+  
+  }
   var dataName = pageId.toLowerCase();
   var shoppingList = $('#'+pageId+'-add-list-item').data(dataName+"List");
-  console.log(newItem, quantity, shoppingList);
+  //console.log(newItem, quantity, shoppingList);
   //return false;
 
   var addedItem = addItem(shoppingList, newItem, quantity);
@@ -415,7 +464,7 @@ $.mobile.document.on( "click", ".add-list-item", function() {
   var addedItemId = addedItem.id;
 console.log(addedItemId);
 
-  var addedItemIndex = addedItemId + 1;
+  var addedItemIndex = addedItemId;
   //return false;
   //var htmlList = '<li><a href="#'+newItem+'">'+newItem+'</a></li>';
   var shoppingItem = '<tr>'+
@@ -438,14 +487,11 @@ console.log(addedItemId);
                   '<a class="ui-btn ui-btn-inline" data-rel="back" ref="#'+shoppingList+'Edit'+newItem+'">cancel</a>'+
                 '</div>'+
               '</div>';
-
+   $(".shoppinglist-item-form").trigger('reset');
    console.log(shoppingItem);
     //$( shoppingItem ).appendTo("#"+shoppingList).trigger( "create" );
-    $( shoppingItem ).appendTo('tbody[id='+shoppingList+']').trigger( "create" );
-    $( "body" ).append(editQuantity);
-    //showHomepage();
-    //$("#"+shoppingList).table("refresh");
-
+   $( shoppingItem ).appendTo('tbody[id='+shoppingList+']').trigger( "create" );
+   $( "body" ).append(editQuantity);
 });
 $.mobile.document.on( "click", ".delete-item", function() {
   //var newItem = $('#new-shopping-list').val();
@@ -476,7 +522,6 @@ $.mobile.document.on( "click", ".purchase-item", function() {
   //return false;
   //console.log(newDeleteItem(shoppingList, itemId));
   var tr = $(this).closest('tr');
-
   console.log(updateStatus(shoppingList, itemId));
   tr.toggleClass('redRow').trigger('create');
   return false;
@@ -592,6 +637,7 @@ function addItem(listName, item, quantity){
   console.log(JSON.stringify(existingEntries));
   //showHomepage();
   $('#index').trigger('refresh');
+    itemToAdd.itemCount = i + 1;
     return itemToAdd;
 }
 
